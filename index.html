@@ -395,13 +395,13 @@ addMsg('Tata','🐱',
   'Hi! 我是 Tata 🐱\n\n欢迎来到你的 Mac 桌面聊天室。\n随便说点什么开始吧！\n\n`/help` 查看命令');
 function connect(){
   // Check if server is reachable
-  fetch(API_BASE+'/api/health')
+  fetch(API_BASE+'/api/health', {mode:'cors'})
     .then(r=>r.json()).then(d=>{
       setConn(d.connected);
     }).catch(()=>setConn(false));
   // Recheck every 30s
   setInterval(()=>{
-    fetch(API_BASE+'/api/health')
+    fetch(API_BASE+'/api/health', {mode:'cors'})
       .then(r=>r.json()).then(d=>setConn(d.connected))
       .catch(()=>setConn(false));
   }, 30000);

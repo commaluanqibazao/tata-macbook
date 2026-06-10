@@ -286,7 +286,11 @@ const sendBtn=document.getElementById('sendBtn');
 const connDot=document.getElementById('connDot');
 const connLabel=document.getElementById('connLabel');
 
-const API_BASE = 'https://228ad1536a6328.lhr.life';
+// Dynamically discover API URL from the repo
+let API_BASE = 'https://228ad1536a6328.lhr.life';  // default fallback
+fetch('api-url.json').then(r=>r.json()).then(d=>{
+  if(d.api_url) API_BASE = d.api_url;
+}).catch(()=>{});
 let typingDiv=null;let connected=false;let sentCount=0;
 
 function addMsg(name,avatar,text,cls=''){

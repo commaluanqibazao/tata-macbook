@@ -373,12 +373,20 @@ async function send(text){
   
   const reply=await sendViaAPI(text);
   clearInterval(typingDiv._t);
-  removeTyping(typingDiv);typingDiv=null;
   
   if(reply){
+    removeTyping(typingDiv);typingDiv=null;
     addMsg('Tata','🐱',reply);
   }else{
-    addMsg('System','⚙','⚠ Server timeout or error');
+    updateTyping(typingDiv,'等待回复中...');
+    const pi=setInterval(async()=>{
+      try{
+        const r=await fetch(API_BASE+'/api/poll',{mode:'cors'});
+        const d=await r.json();
+        if(d.reply){clearInterval(pi);removeTyping(typingDiv);typingDiv=null;addMsg('Tata','🐱',d.reply);}
+      }catch(e){}
+    },2000);
+    setTimeout(()=>{clearInterval(pi);if(typingDiv){removeTyping(typingDiv);typingDiv=null;addMsg('System','⚙','⏱ 回复超时，请稍后在微信查看');}},120000);
   }
 }
 

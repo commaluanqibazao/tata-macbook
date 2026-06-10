@@ -338,16 +338,9 @@ function setConn(ok){
 
 // WebSocket connection
 function connect(){
-  const proto=location.protocol==='https:'?'wss:':'ws:';
-  const host='insiders.vscode.dev';
-  ws=new WebSocket(`${proto}//${host}/tunnel/tata-vscode/chat-ws`);
-  // Fallback: try current origin
-  ws.onerror=()=>{
-    ws=new WebSocket(`${proto}//${location.host}/chat-ws`);
-    ws.onopen=()=>setConn(true);
-    ws.onmessage=handleMsg;
-    ws.onclose=()=>{setConn(false);setTimeout(connect,3000)};
-  };
+  const proto='wss:';
+  // Try tunnel first (works from GitHub Pages or anywhere)
+  ws=new WebSocket(`${proto}//insiders.vscode.dev/tunnel/tata-vscode/chat-ws`);
   ws.onopen=()=>setConn(true);
   ws.onmessage=handleMsg;
   ws.onclose=()=>{setConn(false);setTimeout(connect,3000)};
